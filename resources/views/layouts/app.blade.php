@@ -12,7 +12,8 @@
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
-    <link href="/sweet/dist/sweetalert.css" rel="stylesheet">
+    <script src="sweet/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="sweet/dist/sweetalert.css">
 
     <!-- Scripts -->
     <script>
@@ -84,5 +85,6 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    
 </body>
 </html>

@@ -18,7 +18,7 @@ class Tunjangan extends Model
     	return $this->belongsTo('App\Golongan','golongan_id');
     }
     public function tunjangan_pegawai(){
-    	return $this->hasMany('App\Tunjangan_pegawai','kode_tunjangan_id')
+    	return $this->hasMany('App\Tunjangan_pegawai','kode_tunjangan_id');
     }
    
 }

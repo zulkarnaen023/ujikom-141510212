@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.tampilan')
 
 @section('content')
 <div class="container">

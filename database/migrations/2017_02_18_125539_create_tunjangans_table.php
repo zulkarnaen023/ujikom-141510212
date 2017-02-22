@@ -15,7 +15,7 @@ class CreateTunjangansTable extends Migration
     {
         Schema::create('tunjangans', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('kode_tunjangan_id')->unique();
+            $table->string('kode_tunjangan')->unique();
             $table->unsignedInteger('jabatan_id');
             $table->foreign('jabatan_id')->references('id')->on('jabatans')->onDelete('Cascade')->onUpdate('Cascade');
             $table->unsignedInteger('golongan_id');

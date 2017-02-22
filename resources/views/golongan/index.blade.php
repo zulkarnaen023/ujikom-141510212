@@ -1,44 +1,53 @@
-@extends('layouts.app')
+@extends('layouts.tampilan')
 
 @section('content')
-<div class="flex-center position-ref full-height">
-	<div class="container">
-		<h2>Data Golongan</h2>
-		<hr>
-		<a href="{{ url('/golongan/create') }}" class="btn btn-success">Tambah Data</a>
-		<hr>
-		<table class="table table-striped table-bordered table-hover">
-			<thead>
-				<tr class="success">
-					<th><center>No</center></th>
-					<th><center>Kode Golongan</center></th>
-					<th><center>Nama Golongan</center></th>
-					<th><center>Besaran Uang</center></th>
-					<th colspan="3"><center>Action</center></th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-				$no = 1;
-			?>
-				@foreach($golongan as $data)
-					<tr>
-						<td><center>{{ $no++ }}</center></td>
-						<td>{{ $data->kode_golongan }}</td>
-						<td>{{ $data->nama_golongan }}</td>
-						<td><?php echo 'Rp. '.number_format($data->besaran_uang, 2, ",", "."); ?></td>
-						<td><center><a href="{{ url('golongan', $data->id) }}" class="btn btn-primary">Lihat</a></center></td>
-						<td><center><a href="{{ route('golongan.edit', $data->id) }}" class="btn btn-warning">Ubah</a></center></td>
-						<td><center>
-							{!! Form::open(['method' => 'DELETE', 'route' => ['golongan.destroy', $data->id]]) !!}
-							{!! Form::submit('Hapus', ['class' => 'btn btn-danger']) !!}
-							{!! Form::close() !!}
-						</center></td>
-					</tr>
-				@endforeach
-			</tbody>
-		</table>
-	</div>
-</div>
+ <div class="row mt">
+        <div class="col-md-12">
+            <h2>Data Golongan</h2>
+			<div class="content-panel">
+                <table class="table table-striped table-advance table-hover">
+	               <a href="{{ url('/golongan/create') }}" class="btn btn-success">Tambah Data</a>
+	                  <thead>
+                            <tr>
+                                <th>No</th>
+								<th>Kode Golongan</th>
+								<th>Nama Golongan</th>
+								<th>Besaran Uang</th>
+								<th colspan="3">Action</th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                            <tr>
+                                <?php
+									$no = 1;
+								?>
+						@foreach($golongan as $data)
+							<tr>
+								<td>{{ $no++ }}</td>
+								<td>{{ $data->kode_golongan }}</td>
+								<td>{{ $data->nama_golongan }}</td>
+		                        <td><?php echo 'Rp. '.number_format($data->besaran_uang, 2, ",", "."); ?></td>
+		                        <td>
+		                            <a href="{{ url('golongan', $data->id) }}" class="fa fa-eye btn btn btn-success" ></a>
+		                        </td>
+		                        <td>
+		                            <a href="{{ route('golongan.edit', $data->id) }}" class="fa fa-pencil btn btn-primary" ></a>
+		                            <?php $id=$data->id;?>
+                                 	{!! Form::open(['method' => 'DELETE', 'route'=>['golongan.destroy', $id]]) !!}
+                                 	
+                                 </td>
+                                 <td>
+                                 	<button class="btn btn-danger" type="submit"><i class="fa fa-trash-o"></i></button>
+                                 	{!! Form::close() !!}
+   		                        </td>
+		                    </tr>
+		                @endforeach
+                             
+					   </tbody>
+                </table>
+        </div><!-- /content-panel -->
+    </div><!-- /col-md-12 -->
+</div><!-- /row -->
+
 
 @endsection
