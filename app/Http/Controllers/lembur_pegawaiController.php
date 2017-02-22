@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Request;
 use App\Lembur_pegawai;
 use App\Kategori_lembur;
-use App\User;
 use App\Pegawai;
 use Validator;
-use Input;
+
 class lembur_pegawaiController extends Controller
 {
     /**
@@ -18,10 +17,9 @@ class lembur_pegawaiController extends Controller
      */
     public function index()
     {
-        $lembur_pegawai=Lembur_pegawai::all();  
-        $pegawai=Pegawai::all();
-        return view('lembur_pegawai.index',compact('lembur_pegawai','pegawai'));
-        
+        $lembur_pegawai = Lembur_pegawai::with('Kategori_lembur')->paginate(5);
+        $kategori_lembur = Kategori_lembur::all();
+        return view('Lembur_pegawai.index', compact('lembur_pegawai', 'kategori_lembur'));
     }
 
     /**
@@ -29,13 +27,13 @@ class lembur_pegawaiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-   public function create()
+    public function create()
     {
-        
-      $kategori_lembur=Kategori_lembur::all();
-      $pegawai=Pegawai::all();
-          return view('lembur_pegawai.create',compact('kategori_lembur','pegawai'));
+         $pegawai = Pegawai::all();
+        $kategori_lembur = Kategori_lembur::all();
+        return view('lembur_pegawai.create', compact('pegawai','kategori_lembur'));
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -44,7 +42,25 @@ class lembur_pegawaiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $kategori_lembur = array (
+            'pegawai_id'=>'required|unique:lembur_pegawais',
+            'jumlah_jam'=>'required',
+            );
+        $pesan = array(
+            'pegawai_id.required' =>'Harus Diisi broo',
+            'jumlah_jam.required' =>'Harus Diisi broo',
+            );
+
+        $validation = Validator::make(Request::all(), $kategori_lembur, $pesan);
+
+        if($validation->fails())
+        {
+            return redirect('lembur_pegawai/create')->withErrors($validation)->withInput();
+        }
+
+        $lembur_pegawai = Request::all();
+        Lembur_pegawai::create($lembur_pegawai);
+        return redirect('lembur_pegawai');
     }
 
     /**
@@ -66,7 +82,10 @@ class lembur_pegawaiController extends Controller
      */
     public function edit($id)
     {
-        //
+        $lembur_pegawai = Lembur_pegawai::find($id);
+        $kategori_lembur = Kategori_lembur::all();
+        $pegawai = Pegawai::all();
+        return view('lembur_pegawai.edit', compact('lembur_pegawai','kategori_lembur','pegawai'));
     }
 
     /**
@@ -78,7 +97,10 @@ class lembur_pegawaiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $lembur_pegawai = Request::all();
+        $lem_peg = Lembur_pegawai::find($id);
+        $lem_peg->update($lembur_pegawai);
+        return redirect('lembur_pegawai');
     }
 
     /**
@@ -89,6 +111,7 @@ class lembur_pegawaiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Lembur_pegawai::find($id)->delete();
+        return redirect('lembur_pegawai');
     }
 }
