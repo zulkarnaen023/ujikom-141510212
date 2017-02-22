@@ -179,10 +179,20 @@
                 </ul>
                 <!--  notification end -->
             </div>
-            <div class="top-menu">
-            	<ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="login.html">Logout</a></li>
-            	</ul>
+            <ul class="nav pull-right top-menu" top="menu">
+                                    <li>
+                                        <a class="logout" href="{{ url('/logout') }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            Logout
+                                        </a>
+
+                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </li>
+                                </ul>
+           
             </div>
         </header>
       <!--header end-->
@@ -197,7 +207,7 @@
               <ul class="sidebar-menu" id="nav-accordion">
               
               	  <p class="centered"><a href="profile.html"><img src="{{url('assets/img/ui-sam.jpg')}}" class="img-circle" width="60"></a></p>
-              	  <h5 class="centered">Marcel Newman</h5>
+              	  <h5 class="centered">{{ Auth::user()->name }}</h5>
               	  	
                   <li class="mt">
                       <a href="{{url('golongan')}}">
