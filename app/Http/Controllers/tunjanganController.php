@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Request;
 use App\Jabatan;
 use App\Tunjangan;
@@ -17,11 +17,15 @@ class tunjanganController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('Admin');
+    }
     public function index()
     {
         $jabatan = Jabatan::all();
         $golongan = Golongan::all();
-        $tunjangan = Tunjangan::all();
+        $tunjangan = Tunjangan::paginate(5);
         return view('tunjangan.index', compact('tunjangan','jabatan','golongan'));    
     }
 

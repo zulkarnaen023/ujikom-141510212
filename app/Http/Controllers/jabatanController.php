@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Request;
 use App\Jabatan;
 use DB;
@@ -20,7 +20,7 @@ class jabatanController extends Controller
     }
     public function index()
     {
-         $jabatan = Jabatan::all();
+         $jabatan = Jabatan::paginate(5);
         return view('jabatan.index', compact('jabatan'));        
     }
 

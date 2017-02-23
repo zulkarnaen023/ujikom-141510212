@@ -44,7 +44,9 @@
 		                @endforeach
                              
 					   </tbody>
-                </table>
+
+                </table>&nbsp;&nbsp;&nbsp;&nbsp;
+                <?php echo $jabatan->render(); ?>
         </div><!-- /content-panel -->
     </div><!-- /col-md-12 -->
 </div><!-- /row -->

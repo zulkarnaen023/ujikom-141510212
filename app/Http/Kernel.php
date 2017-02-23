@@ -54,5 +54,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'Admin' => \App\Http\Middleware\Admin::class,
         'Pegawai' => \App\Http\Middleware\Pegawai::class,
+        'Hrd' => \App\Http\Middleware\Pegawai::class,
+        'Keuangan' => \App\Http\Middleware\Pegawai::class,
     ];
 }

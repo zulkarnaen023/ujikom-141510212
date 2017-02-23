@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Request;
 use App\Golongan;
 use DB;
@@ -20,7 +20,7 @@ class golonganController extends Controller
     }
     public function index()
     {
-         $golongan = Golongan::all();
+         $golongan = Golongan::paginate(5);
         return view('golongan.index', compact('golongan'));        
     }
 

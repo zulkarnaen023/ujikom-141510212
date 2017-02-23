@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Request;
+use App\Http\Requests;
 use App\Jabatan;
 use App\Golongan;
 use App\User;
@@ -22,14 +23,14 @@ class pegawaiController extends Controller
      */
      public function __construct()
     {
-        $this->middleware('Admin');
+        $this->middleware('Hrd');
     }
     
     public function index()
     {
         $jabatan = Jabatan::all();
         $golongan = Golongan::all();
-        $pegawai = Pegawai::all();
+        $pegawai = Pegawai::paginate(5);
         return view('pegawai.index', compact('jabatan', 'golongan', 'pegawai'));
     }
 
@@ -56,10 +57,9 @@ class pegawaiController extends Controller
             $kode = "1049652".$newkode;
         }
 
-        $dd = User::all();
         $jabatan = Jabatan::all();
         $golongan = Golongan::all();
-        return view('pegawai.create', compact('kode', 'pegawai', 'dd', 'jabatan', 'golongan'));  
+        return view('pegawai.create', compact('kode', 'pegawai', 'jabatan', 'golongan'));  
     }
 
     /**
@@ -70,28 +70,39 @@ class pegawaiController extends Controller
      */
     public function store(Request $request)
     {
-        $input = Request::all();
+       $this -> validate($request, [
+            'name' => 'required|max:255',
+            'nip' => 'required|numeric|min:3|unique:pegawais',
+            'permission' => 'required|max:255',
+            'email' => 'required|email|max:100|unique:users',
+            'password' => 'required|min:6|confirmed',
+            ]); 
+
+        
         $user = User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => bcrypt($input['password']),
-            'permission' => $input['permission']
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'permission' => $request->get('permission'),
+            'password' => bcrypt($request->get('password')),
         ]);
 
-        $file = Input::file('photo');
-        $destinationPath = public_path().'/image/';
-        $filename = str_random(6).'_'.$file->getClientOriginalName();
-        $uploadSuccess = $file->move($destinationPath, $filename);
+        if($request->hasFile('photo')){
+            $uploaded_photo = $request->file('photo');
+            $extension = $uploaded_photo->getClientOriginalExtension();
+            $filename = md5 (time()) . '.' . $extension;
+            $destinationPath = public_path() . DIRECTORY_SEPARATOR . '/image/';
+            $uploaded_photo->move($destinationPath, $filename);
 
-        if(Input::hasFile('photo')){
-           $mm = new Pegawai;
-           $mm->Nip = Input::get('nip'); 
-           $mm->user_id = $user->id;  
-           $mm->jabatan_id = Input::get('jabatan_id'); 
-           $mm->golongan_id = Input::get('golongan_id'); 
-           $mm->Photo = $filename;
-           $mm->save();
+            $pegawai = new Pegawai;
+            $pegawai->nip = $request->get('nip');
+            $pegawai->user_id = $user->id;
+            $pegawai->golongan_id = $request->get('golongan_id');
+            $pegawai->jabatan_id = $request->get('jabatan_id');
+
+            $pegawai->photo = $filename;
+            $pegawai->save();
         }
+
         return redirect('pegawai');
     }
 
@@ -115,7 +126,7 @@ class pegawaiController extends Controller
      */
     public function edit($id)
     {
-         $pegawai = pegawai::find($id);
+        $pegawai = pegawai::find($id);
         $jabatan = Jabatan::all();
         $golongan = Golongan::all();
 
@@ -131,22 +142,34 @@ class pegawaiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pegawai = Pegawai::find($id);
+         $pegawai = Pegawai::find($id);
+            $pegawai->nip = $request->get('nip');
+            $pegawai->golongan_id = $request->get('golongan_id');
+            $pegawai->jabatan_id = $request->get('jabatan_id');
 
-        if(Request::hasFile('Photo')){
-            $file = Request::file('Photo');
-            $destinationPath = public_path().'/image/';
-            $filename = str_random(6).'_'.$file->getClientOriginalName();
-            $uploadSuccess = $file->move($destinationPath, $filename);
+        $this -> validate($request, [
+            'Nip' => 'required|numeric|min:3|',
+            ]);
+
+        if($request->hasFile('photo')){
+            $filename = null;
+            $uploaded_photo = $request->file('photo');
+            $extension = $uploaded_photo->getClientOriginalExtension();
+            $filename = md5 (time()) . '.' . $extension;
+            $destinationPath = public_path() . DIRECTORY_SEPARATOR . '/image/';
+            $uploaded_photo->move($destinationPath, $filename);
+            if ($pegawai->photo) {
+                $old_photo = $pegawai->Photo;
+                $filepath = public_path() . DIRECTORY_SEPARATOR . '/image/' . DIRECTORY_SEPARATOR . $pegawai->photo;
+                try {
+                    File::delete($filepath);
+                } catch(FileNotFoundException $e) {
+                    // File sudah dihapus/tidak ada
+                }
+            }
+            $pegawai->photo = $filename;
         }
-        
-        $pegawai->Nip = Request::get('Nip'); 
-        $pegawai->jabatan_id = Request::get('jabatan_id'); 
-        $pegawai->golongan_id = Request::get('golongan_id'); 
-        $pegawai->Photo = $filename;
-        $pegawai->save();
-        return redirect('pegawai');
-    }
+        $pegawai->save();}
 
     /**
      * Remove the specified resource from storage.

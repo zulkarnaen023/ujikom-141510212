@@ -47,6 +47,8 @@
                              
 					   </tbody>
                 </table>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <?php echo $kategori_lembur->render(); ?>
         </div><!-- /content-panel -->
     </div><!-- /col-md-12 -->
 </div><!-- /row -->

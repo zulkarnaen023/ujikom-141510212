@@ -31,3 +31,9 @@ Route::resource('pegawai','pegawaiController');
 Route::resource('tunjangan','tunjanganController');
 
 Route::resource('lembur_pegawai','lembur_pegawaiController');
+
+Route::resource('tunjangan_pegawai','tunjangan_pegawaiController');
+
+Route::resource('penggajian','penggajianController');
+
+Route::get('query', 'CariController@search');

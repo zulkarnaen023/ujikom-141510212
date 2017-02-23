@@ -247,6 +247,12 @@
                           <span>Pegawai</span>
                       </a>
                   </li>
+                  <li class="sub-menu">
+                       <a href="{{url('tunjangan_pegawai')}}">
+                          <i class="fa fa-user" aria-hidden="true"></i>
+                          <span>Tunjangan pegawai</span>
+                      </a>
+                  </li>
               </ul>
               <!-- sidebar menu end-->
           </div>

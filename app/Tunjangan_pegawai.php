@@ -12,7 +12,7 @@ class Tunjangan_pegawai extends Model
     public $timestamp = true;
 
     public function pegawai(){
-    	return $this->hasMany('App\Pegawai','pegawai_id');
+    	return $this->belongsTo('App\Pegawai','pegawai_id');
     }
     public function tunjangan(){
     	return $this->belongsTo('App\Tunjangan','kode_tunjangan_id');

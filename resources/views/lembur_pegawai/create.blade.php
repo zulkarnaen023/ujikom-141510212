@@ -16,9 +16,9 @@
 							@endforeach
 						</select>
 						@if ($errors->has('kode_lembur_id'))
-				                                    <span class="help-block">
-				                                        <strong>{{ $errors->first('kode_lembur_id') }}</strong>
-				                                    </span>
+							<span class="help-block">
+				            	<strong>{{ $errors->first('kode_lembur_id') }}</strong>
+				            </span>
 				        @endif
 					</div>
 					<div class="form-group{{ $errors->has('golongan_id') ? ' has-error' : 'pesan' }}">

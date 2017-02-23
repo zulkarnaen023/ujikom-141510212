@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Request;
 use App\Jabatan;
 use App\Kategori_lembur;
@@ -24,7 +24,7 @@ class kategori_lemburController extends Controller
     {
         $jabatan = Jabatan::all();
         $golongan = Golongan::all();
-         $kategori_lembur = Kategori_lembur::all();
+         $kategori_lembur = Kategori_lembur::paginate(5);
         return view('kategori_lembur.index', compact('kategori_lembur','jabatan','golongan'));        
     }
 

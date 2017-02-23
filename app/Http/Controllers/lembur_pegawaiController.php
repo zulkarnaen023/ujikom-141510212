@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Request;
 use App\Lembur_pegawai;
 use App\Kategori_lembur;
@@ -15,6 +15,10 @@ class lembur_pegawaiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('Keuangan');
+    }
     public function index()
     {
         $lembur_pegawai = Lembur_pegawai::with('Kategori_lembur')->paginate(5);
@@ -29,7 +33,7 @@ class lembur_pegawaiController extends Controller
      */
     public function create()
     {
-         $pegawai = Pegawai::all();
+        $pegawai = Pegawai::all();
         $kategori_lembur = Kategori_lembur::all();
         return view('lembur_pegawai.create', compact('pegawai','kategori_lembur'));
     }

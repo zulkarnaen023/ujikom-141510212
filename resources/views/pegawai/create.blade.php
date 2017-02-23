@@ -73,13 +73,6 @@
                         <hr>
                         
 
-
-
-
-
-
-
-
 						<div class="form-group{{ $errors->has('Nip') ? ' has-error' : '' }}">
                             <label for="Nip" class="col-md-4 control-label">NIP</label>
 							<div class="col-md-6">
@@ -109,10 +102,19 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('Photo') ? ' has-error' : '' }}">
+                       <div class="form-group{{ $errors->has('Photo') ? ' has-error' : '' }}">
                             <label for="Photo" class="col-md-4 control-label">Photo</label>
+
                             <div class="col-md-6">
-                                <input id="Photo" type="file" class="form-control" name="photo" value="{{ old('photo') }}" required autofocus>
+                            <span class="glyphicon glyphicon-align-left" aria-label></span>
+
+                                <input id="Photo" type="file" class="form-control" name="Photo" value="{{ old('Photo') }}" required autofocus>
+
+                                @if ($errors->has('Photo'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('Photo') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
 						<div class="form-group">
