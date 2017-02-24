@@ -7,6 +7,7 @@ use App\Golongan;
 use DB;
 use Validator;
 use Input;
+use Alert;
 class golonganController extends Controller
 {
     /**
@@ -57,19 +58,33 @@ class golonganController extends Controller
      */
     public function store(Request $request)
     {
-        $golongan = Request::all();
-        $jb = Validator::make($golongan, [
-                'kode_golongan' => 'required',
-                'nama_golongan' => 'required|unique',
-                'besaran_uang' => 'required'
-        ]);
-        $jb = Golongan::create([
-            'kode_golongan' => $golongan['kode_golongan'],
-            'nama_golongan' => $golongan['nama_golongan'],
-            'besaran_uang' => $golongan['besaran_uang']
-        ]);
+       $rules=['kode_golongan'=>'required|unique:golongans',
+                'nama_golongan'=>'required|unique:golongans',
+                
+                'besaran_uang'=>'required|numeric'];
+        $message=['kode_golongan.required'=>'Harus Di Isi',
+                'kode_golongan.unique'=>'Tidak Boleh Sama',
+                'nama_golongan.unique'=>'Tidak Boleh Sama',
+                'nama_golongan.required'=>'Harus Di Isi',
+                'besaran_uang.required'=>'Harus Diisi',
+                'besaran_uang.numeric'=>'Harus Angka'];
+        $valid=Validator::make(Input::all(),$rules,$message);
+        if ($valid->fails()) {
 
+            alert()->error('Data Salah');  
+            return redirect('golongan/create')
+            ->withErrors($valid)
+            ->withInput();
+        }
+        else
+        {
+        $golongan=Request::all();
+        alert()->success('Data Tersimpan');
+        golongan::create($golongan);
+
+        
         return redirect('golongan');
+        }
     }
 
     /**

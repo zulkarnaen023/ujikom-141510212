@@ -25,7 +25,7 @@ class CreatePegawaisTable extends Migration
             $table->unsignedInteger('golongan_id');
             $table->foreign('golongan_id')->references('id')->on('golongans')
                   ->onUpdate('cascade')->onDelete('cascade');
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->timestamps();
         });
     }

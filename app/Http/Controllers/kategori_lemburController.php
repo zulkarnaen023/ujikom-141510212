@@ -65,21 +65,31 @@ class kategori_lemburController extends Controller
     public function store(Request $request)
     {
 
-        $kategori_lembur = Request::all();
-        $jb = Validator::make($kategori_lembur, [
-                'kode_lembur' => 'required|unique',
-                'jabatan_id' => 'required',
-                'golongan_id' => 'required',
-                'besaran_uang' => 'required'
-        ]);
-        $jb = Kategori_lembur::create([
-            'kode_lembur' => $kategori_lembur['kode_lembur'],
-            'jabatan_id' => $kategori_lembur['jabatan_id'],
-            'golongan_id' => $kategori_lembur['golongan_id'],
-            'besaran_uang' => $kategori_lembur['besaran_uang']
-        ]);
+       $kategori_lembur = Request::all();
+        $rules = ['kode_lembur' => 'required|unique:kategori_lemburs',
+                  'jabatan_id' => 'required',
+                  'golongan_id' => 'required',
+                  'besaran_uang' => 'required|numeric'];
+        $message = ['kode_lembur.required' => 'Harus Diisi',
+                'kode_lembur.unique' => 'Data Sudah Ada',
+                'jabatan_id.required' => 'Harus Diisi',
+                'golongan_id.required' => 'Harus Diisi',
+                'besaran_uang.required' => 'Harus Diisi',
+                'besaran_uang.numeric' => 'Harus Angka'];
+        $valid=Validator::make(Input::all(),$rules,$message);
+        if ($valid->fails()) {
 
+            alert()->error('Data Gagal Ditambahkan');  
+            return redirect('kategori_lembur/create')
+            ->withErrors($valid)
+            ->withInput();
+        }
+        else
+        {
+        alert()->success('Data Tersimpan');
+        kategori_lembur::create($kategori_lembur);
         return redirect('kategori_lembur');
+    }
     }
 
     /**

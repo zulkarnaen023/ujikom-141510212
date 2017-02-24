@@ -76,7 +76,7 @@
 						<div class="form-group{{ $errors->has('Nip') ? ' has-error' : '' }}">
                             <label for="Nip" class="col-md-4 control-label">NIP</label>
 							<div class="col-md-6">
-                                <input id="Nip" type="text" class="form-control" name="nip" value="{{ $kode }}" readonly required autofocus>
+                                <input id="nip" type="text" class="form-control" name="nip" value="{{ $kode }}" readonly required autofocus>
                             </div>
                         </div>
                     
@@ -102,21 +102,14 @@
                                 </select>
                             </div>
                         </div>
-                       <div class="form-group{{ $errors->has('Photo') ? ' has-error' : '' }}">
-                            <label for="Photo" class="col-md-4 control-label">Photo</label>
-
+                         <div class="form-group{{ $errors->has('photo') ? ' has-error' : '' }}">
+                            <label for="photo" class="col-md-4 control-label">photo</label>
                             <div class="col-md-6">
-                            <span class="glyphicon glyphicon-align-left" aria-label></span>
-
-                                <input id="Photo" type="file" class="form-control" name="Photo" value="{{ old('Photo') }}" required autofocus>
-
-                                @if ($errors->has('Photo'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('Photo') }}</strong>
-                                    </span>
-                                @endif
+                            <img  id="showgambar" src="{{asset('img/default.png')}}" width="200" height="200" class="img img-thumbnail">
+                                <input id="photo" type="file" class="form-control" name="photo" value="{{ old('photo') }}" autofocus>
                             </div>
                         </div>
+                       
 						<div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">

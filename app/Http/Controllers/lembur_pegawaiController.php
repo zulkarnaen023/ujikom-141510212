@@ -7,6 +7,7 @@ use App\Lembur_pegawai;
 use App\Kategori_lembur;
 use App\Pegawai;
 use Validator;
+use Input;
 
 class lembur_pegawaiController extends Controller
 {
@@ -46,24 +47,37 @@ class lembur_pegawaiController extends Controller
      */
     public function store(Request $request)
     {
-        $kategori_lembur = array (
-            'pegawai_id'=>'required|unique:lembur_pegawais',
-            'jumlah_jam'=>'required',
-            );
-        $pesan = array(
-            'pegawai_id.required' =>'Harus Diisi broo',
-            'jumlah_jam.required' =>'Harus Diisi broo',
-            );
-
-        $validation = Validator::make(Request::all(), $kategori_lembur, $pesan);
-
-        if($validation->fails())
-        {
-            return redirect('lembur_pegawai/create')->withErrors($validation)->withInput();
-        }
-
+        $kategori_lembur = kategori_lembur::all();
+        
         $lembur_pegawai = Request::all();
-        Lembur_pegawai::create($lembur_pegawai);
+        $rules = ['pegawai_id' => 'required',
+                  'jumlah_jam' => 'required|numeric'];
+        $sms = ['pegawai_id.required' => 'Harus Diisi',
+                'jumlah_jam.required' => 'Harus Diisi',
+                'jumlah_jam.numeric' => 'Harus Angka'];
+        $valid=Validator::make(Input::all(),$rules,$sms);
+        if ($valid->fails()) {
+
+            alert()->error('Data Salah');  
+            return redirect('lembur_pegawai/create')
+            ->withErrors($valid)
+            ->withInput();
+        }
+        else
+        {
+        alert()->success('Data Tersimpan');
+        $pegawai = pegawai::where('id',$lembur_pegawai['pegawai_id'])->first();
+        $check = kategori_lembur::where('jabatan_id',$pegawai->jabatan_id)->where('golongan_id',$pegawai->golongan_id)->first();
+        if(!isset($check)){
+            $pegawai = pegawai::with('User')->get();
+            $missing_count = true;
+            // dd($error_klnf);
+            return view('lembur_pegawai.create',compact('kategori_lembur','pegawai','missing_count'));
+        }
+        $lembur_pegawai['kode_lembur_id'] = $check->id;
+        
+        lembur_pegawai::create($lembur_pegawai);
+        }
         return redirect('lembur_pegawai');
     }
 

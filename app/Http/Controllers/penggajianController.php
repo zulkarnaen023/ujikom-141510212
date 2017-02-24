@@ -80,7 +80,7 @@ class penggajianController extends Controller
             $nol=0 ;
             $penggajian->jumlah_jam_lembur=$nol;
             $penggajian->jumlah_uang_lembur=$nol ;
-             $penggajian->status_pengembalian=$request->get('status_pengembalian') ;
+             $penggajian->status_pengambilan=$request->get('status_pengambilan') ;
             $penggajian->gaji_pokok=$wherejabatan->besaran_uang+$wheregolongan->besaran_uang;
             $penggajian->total_gaji=($wheretunjangan->besaran_uang)+($wherejabatan->besaran_uang+$wheregolongan->besaran_uang);
         $penggajian->tunjangan_pegawai_id=Input::get('tunjangan_pegawai_id');
@@ -91,7 +91,7 @@ class penggajianController extends Controller
             $nol=0 ;
             $penggajian->jumlah_jam_lembur=$nol;
             $penggajian->jumlah_uang_lembur=$nol ;
-              $penggajian->status_pengembalian=$request->get('status_pengembalian') ;
+              $penggajian->status_pengambilan=$request->get('status_pengambilan') ;
             $penggajian->gaji_pokok=$wherejabatan->besaran_uang+$wheregolongan->besaran_uang;
             $penggajian->total_gaji=($wheretunjangan->besaran_uang)+($wherejabatan->besaran_uang)+($wheregolongan->besaran_uang);
         $penggajian->tunjangan_pegawai_id=Input::get('tunjangan_pegawai_id');
@@ -105,7 +105,7 @@ class penggajianController extends Controller
           foreach ($wherepegawai->lembur_pegawai as $data) {
                 $penggajian['jumlah_jam_lembur']+=$data->jumlah_jam;
                 $penggajian['jumlah_uang_lembur']+=$wherekategorilembur->besaran_uang*$data->jumlah_jam;
-              $penggajian->status_pengembalian=$request->get('status_pengembalian') ;
+              $penggajian->status_pengambilan=$request->get('status_pengambilan') ;
             $penggajian->gaji_pokok=$wherejabatan->besaran_uang+$wheregolongan->besaran_uang;
             $penggajian->total_gaji=( $penggajian['jumlah_jam_lembur']*$wherekategorilembur->besaran_uang)+($wheretunjangan->besaran_uang)+($wherejabatan->besaran_uang)+($wheregolongan->besaran_uang);
              }
@@ -155,7 +155,7 @@ class penggajianController extends Controller
               $penggajian->gaji_pokok = $request->get('gaji_pokok');
                 $penggajian->total_gaji = $request->get('total_gaji');
                   $penggajian->tanggal_pengambilan = $request->get('tanggal_pengambilan');
-                    $penggajian->status_pengembalian = $request->get('status_pengembalian');
+                    $penggajian->status_pengambilan = $request->get('status_pengambilan');
                            $penggajian->petugas_penerima = $request->get('petugas_penerima');
             $penggajian->save();
              return redirect('penggajian');    }

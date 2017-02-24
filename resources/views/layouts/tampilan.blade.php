@@ -17,7 +17,7 @@
     <!-- Custom styles for this template -->
     <link href="{{url('assets/css/style.css')}}" rel="stylesheet">
     <link href="{{url('assets/css/style-responsive.css')}}" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{url('sweet/dist/sweetalert.css')}}">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -215,30 +215,43 @@
                           <span>Golongan</span>
                       </a>
                   </li>
-
+                  <li class="sub-menu">
+                      <a href="javascript:;" >
+                          <i class="fa fa-clock-o"></i>
+                          <span>Lembur</span>
+                      </a>
+                      <ul class="sub">
+                          <li><a href="{{url('lembur_pegawai')}}">
+                        
+                          <span>Lembur Pegawai</span>
+                      </a></li>
+                          <li><a href="{{url('kategori_lembur')}}">
+                       
+                          <span>Kategori Lembur</span>
+                      </a></li>
+                      </ul>
+                  </li>
+                   <li class="sub-menu">
+                      <a href="javascript:;" >
+                          <i class="fa fa-desktop"></i>
+                          <span>Tunjangan</span>
+                      </a>
+                      <ul class="sub">
+                          <li><a href="{{url('tunjangan')}}">
+                          <i class="fa fa-dashboard"></i>
+                          <span>Kategori Tunjangan</span>
+                      </a></li>
+                          <li><a href="{{url('tunjangan_pegawai')}}">
+                          <i class="fa fa-dashboard"></i>
+                          <span>Tunjangan Pegawai</span>
+                      </a></li>
+                      </ul>
+                  </li>
                  
                   <li class="sub-menu">
                       <a href="{{url('jabatan')}}">
                           <i class="fa fa-dashboard"></i>
                           <span>Jabatan</span>
-                      </a>
-                  </li>
-                  <li class="sub-menu">
-                     <a href="{{url('kategori_lembur')}}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>Kategori Lembur</span>
-                      </a>
-                  </li>
-                  <li class="sub-menu">
-                      <a href="{{url('tunjangan')}}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>Tunjangan</span>
-                      </a>
-                  </li>
-                  <li class="sub-menu">
-                       <a href="{{url('lembur_pegawai')}}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>Lembur Pegawai</span>
                       </a>
                   </li>
                    <li class="sub-menu">
@@ -300,7 +313,8 @@
 
     <!--common script for all pages-->
     <script src="{{url('assets/js/common-scripts.js')}}"></script>
-
+<script src="{{url('sweet/dist/sweetalert.min.js')}}"></script>
+    @include('sweet::alert')
     <!--script for this page-->
     
   <script>

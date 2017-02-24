@@ -11,6 +11,7 @@ use App\Pegawai;
 use DB;
 use Validator;
 use Input;
+use File;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -70,39 +71,38 @@ class pegawaiController extends Controller
      */
     public function store(Request $request)
     {
-       $this -> validate($request, [
+         $this->validate($request,[
             'name' => 'required|max:255',
-            'nip' => 'required|numeric|min:3|unique:pegawais',
-            'permission' => 'required|max:255',
             'email' => 'required|email|max:100|unique:users',
             'password' => 'required|min:6|confirmed',
-            ]); 
-
-        
-        $user = User::create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'permission' => $request->get('permission'),
-            'password' => bcrypt($request->get('password')),
+            'permission' => 'required',
+            'nip' => 'required|unique:pegawais,nip',
         ]);
-
+        $user = User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => bcrypt($request['password']),
+            'permission' =>  $request['permission'],
+        ]);
+        $pegawai = new Pegawai;
+        $pegawai->nip =  $request['nip']; 
+        $pegawai->user_id = $user->id;  
+        $pegawai->jabatan_id =  $request['jabatan_id']; 
+        $pegawai->golongan_id =  $request['golongan_id']; 
+        
         if($request->hasFile('photo')){
-            $uploaded_photo = $request->file('photo');
-            $extension = $uploaded_photo->getClientOriginalExtension();
-            $filename = md5 (time()) . '.' . $extension;
-            $destinationPath = public_path() . DIRECTORY_SEPARATOR . '/image/';
-            $uploaded_photo->move($destinationPath, $filename);
-
-            $pegawai = new Pegawai;
-            $pegawai->nip = $request->get('nip');
-            $pegawai->user_id = $user->id;
-            $pegawai->golongan_id = $request->get('golongan_id');
-            $pegawai->jabatan_id = $request->get('jabatan_id');
-
-            $pegawai->photo = $filename;
-            $pegawai->save();
+            $file = $request->file('photo');
+            $destinationPath = public_path().'/image/';
+            $filename = str_random(6).'_'.$file->getClientOriginalExtension();
+            $uploadSuccess = $file->move($destinationPath, $filename);
+            
+            $pegawai->photo = $filename;          
         }
-
+        else{
+            $pegawai->photo = 'default.png';
+           
+        }
+        $pegawai->save();
         return redirect('pegawai');
     }
 
@@ -148,7 +148,7 @@ class pegawaiController extends Controller
             $pegawai->jabatan_id = $request->get('jabatan_id');
 
         $this -> validate($request, [
-            'Nip' => 'required|numeric|min:3|',
+            'nip' => 'required|numeric|min:3|',
             ]);
 
         if($request->hasFile('photo')){
@@ -159,7 +159,7 @@ class pegawaiController extends Controller
             $destinationPath = public_path() . DIRECTORY_SEPARATOR . '/image/';
             $uploaded_photo->move($destinationPath, $filename);
             if ($pegawai->photo) {
-                $old_photo = $pegawai->Photo;
+                $old_photo = $pegawai->photo;
                 $filepath = public_path() . DIRECTORY_SEPARATOR . '/image/' . DIRECTORY_SEPARATOR . $pegawai->photo;
                 try {
                     File::delete($filepath);
@@ -169,7 +169,9 @@ class pegawaiController extends Controller
             }
             $pegawai->photo = $filename;
         }
-        $pegawai->save();}
+        $pegawai->save();
+        return redirect('pegawai');
+    }
 
     /**
      * Remove the specified resource from storage.

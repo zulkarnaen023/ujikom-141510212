@@ -12,7 +12,8 @@
                                 <th>No</th>
 								<th>Kode lembur</th>
 								<th>Nama Pegawai</th>
-								<th>Nama Jumlah Jam</th>
+								<th>Jumlah Jam</th>
+								<th>Besaran uang</th>
 								<th colspan="3">Action</th>
                             </tr>
                       </thead>
@@ -28,6 +29,7 @@
 						<td>{{ $data->kategori_lembur->kode_lembur }}</td>
 						<td>{{ $data->pegawai->User->name }}</td>
 						<td>{{ $data->jumlah_jam}}</td>
+						<td><?php echo 'Rp.'. number_format($data->Kategori_lembur->besaran_uang*$data->jumlah_jam, 2,",","."); ?></td>
 						<td>
 		                        <a href="{{ url('lembur_pegawai', $data->id) }}" class="fa fa-eye btn btn btn-success" ></a>
 		                        </td>
